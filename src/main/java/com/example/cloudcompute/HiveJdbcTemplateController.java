@@ -1,12 +1,16 @@
 package com.example.cloudcompute;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 使用 JdbcTemplate 操作 Hive
@@ -28,25 +32,58 @@ public class HiveJdbcTemplateController {
     /**
      * 示例：创建新表
      */
-    @RequestMapping("/table/create")
-    public String createTable() {
+    @RequestMapping("/goods/create")
+    public String createGoodsTable() {
         StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
-        sql.append("user_sample");
-        sql.append("(user_num BIGINT, user_name STRING, user_gender STRING, user_age INT)");
-        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
-        sql.append("STORED AS TEXTFILE"); // 作为文本存储
-
+        sql.append("goods");
+        sql.append("(goods_id INT, goods_name STRING, goods_info STRING, goods_pic STRING, goods_price INT, goods_number INT)");
+//        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
+//        sql.append("STORED AS TEXTFILE"); // 作为文本存储
         logger.info("Running: " + sql);
         String result = "Create table successfully...";
         try {
-            // hiveJdbcTemplate.execute(sql.toString());
             hiveJdbcTemplate.execute(sql.toString());
         } catch (DataAccessException dae) {
             result = "Create table encounter an error: " + dae.getMessage();
             logger.error(result);
         }
         return result;
+    }
 
+    @RequestMapping("/user/create")
+    public String createUserTable() {
+        StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
+        sql.append("users");
+        sql.append("(user_id INT, user_name STRING, user_password STRING, user_phone STRING, user_address STRING)");
+//        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
+//        sql.append("STORED AS TEXTFILE "); // 作为文本存储
+        logger.info("Running: " + sql);
+        String result = "Create table successfully...";
+        try {
+            hiveJdbcTemplate.execute(sql.toString());
+        } catch (DataAccessException dae) {
+            result = "Create table encounter an error: " + dae.getMessage();
+            logger.error(result);
+        }
+        return result;
+    }
+
+    @RequestMapping("/order/create")
+    public String createOrderTable() {
+        StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
+        sql.append("orders");
+        sql.append("(order_id INT, user_name STRING, goods_name STRING, goods_number INT)");
+//        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
+//        sql.append("STORED AS TEXTFILE"); // 作为文本存储
+        logger.info("Running: " + sql);
+        String result = "Create table successfully...";
+        try {
+            hiveJdbcTemplate.execute(sql.toString());
+        } catch (DataAccessException dae) {
+            result = "Create table encounter an error: " + dae.getMessage();
+            logger.error(result);
+        }
+        return result;
     }
 
     /**
@@ -72,11 +109,28 @@ public class HiveJdbcTemplateController {
      */
     @RequestMapping("/table/insert")
     public String insertIntoTable() {
-        String sql = "INSERT INTO TABLE  user_sample(user_num,user_name,user_gender,user_age) VALUES(888,'Plum','M',32)";
+//        String sql = "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(1,'苹果','红的','dfada',15,32)";
+//        String sql2= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(2,'梨子','鸭的','dfada',15,32)";
+//        String sql3= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(3,'桃子','长毛的','dfada',15,32)";
+//        String sql4= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(4,'葡萄','绿的','dfada',15,32)";
+//        String sql5= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(5,'榴莲','香的','dfada',15,32)";
+//        String sql6="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('ghy','123456','18721923502','20号楼533')";
+//        String sql7="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('ghy','榴莲',3)";
+        String a="香蕉";
+        int b=15;
+        String sql8="INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(6,'"+a+"','香的','dfada',"+b+",32)";
         String result = "Insert into table successfully...";
+
         try {
             // hiveJdbcTemplate.execute(sql);
-            hiveJdbcTemplate.execute(sql);
+//            hiveJdbcTemplate.execute(sql);
+//            hiveJdbcTemplate.execute(sql2);
+//            hiveJdbcTemplate.execute(sql3);
+//            hiveJdbcTemplate.execute(sql4);
+//            hiveJdbcTemplate.execute(sql5);
+//            hiveJdbcTemplate.execute(sql6);
+//            hiveJdbcTemplate.execute(sql7);
+            hiveJdbcTemplate.execute(sql8);
         } catch (DataAccessException dae) {
             result = "Insert into table encounter an error: " + dae.getMessage();
             logger.error(result);
@@ -100,5 +154,154 @@ public class HiveJdbcTemplateController {
             logger.error(result);
         }
         return result;
+    }
+
+    @PostMapping("/goods/select")
+    public Map<String,Object> goodsSelect(){
+        Map<String,Object> map=new HashMap<>();
+        String sql ="SELECT * FROM goods";
+        String result;
+        List<Map<String, Object>> rows;
+        try {
+            rows= hiveJdbcTemplate.queryForList(sql);
+            map.put("goods_list", rows);
+        } catch (DataAccessException dae) {
+            result = "Select table encounter an error: " + dae.getMessage();
+            map.put("goods_list", result);
+        }
+        return map;
+    }
+
+    @PostMapping("/order/select")
+    public Map<String,Object> selectOrder(@RequestBody Map<String,String> iMap){
+        Map<String,Object> map=new HashMap<>();
+        String result ="前端返回参数无效";
+        if(iMap.get("user_name")!=null){
+            String userName=iMap.get("user_name");
+            String sql="SELECT * FROM orders o WHERE o.user_name=?";
+            List<Map<String, Object>> rows;
+            try {
+                rows= hiveJdbcTemplate.queryForList(sql,userName);
+                map.put("order_list", rows);
+            } catch (DataAccessException dae) {
+                result = "Select table encounter an error: " + dae.getMessage();
+                map.put("order_list", result);
+            }
+            return map;
+        }
+        else{
+            map.put("order_list", result);
+            return map;
+        }
+    }
+
+    @PostMapping("/user/update")
+    public Map<String,Object> userUpdate(@RequestBody Map<String,String> iMap) {
+        Map<String,Object> map=new HashMap<>();
+        String result ="前端返回参数无效";
+        if(iMap.get("user_name")!=null){
+            String userName=iMap.get("user_name");
+            String userPhone=iMap.get("user_phone");
+            String useradd=iMap.get("user_address");
+            String sql="UPDATE users SET user_phone='"+userPhone+"' WHERE user_name='"+userName+"'";
+            String sql2="UPDATE users SET user_address='"+useradd+"' WHERE user_name='"+userName+"'";
+            try {
+                hiveJdbcTemplate.execute(sql);
+                hiveJdbcTemplate.execute(sql2);
+            } catch (DataAccessException dae) {
+                result = "Update table encounter an error: " + dae.getMessage();
+                map.put("result", result);
+            }
+        }
+        else{
+            map.put("result", result);
+        }
+        return map;
+    }
+
+    @PostMapping("/user/register")
+    public Map<String,Object> userRegister(@RequestBody Map<String,String> iMap) {
+        Map<String, Object> map = new HashMap<>();
+        String result = "前端返回参数无效";
+        if(iMap.get("user_name")!=null){
+            String userName=iMap.get("user_name");
+            String userPhone=iMap.get("user_phone");
+            String useradd=iMap.get("user_address");
+            String userPass=iMap.get("user_password");
+            String sql="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('"+userName+"','"+userPass+"','"+userPhone+"','"+useradd+"')";
+            try {
+                hiveJdbcTemplate.execute(sql);
+            } catch (DataAccessException dae) {
+                result = "Insert table encounter an error: " + dae.getMessage();
+                map.put("result", result);
+            }
+        }
+        else{
+            map.put("result", result);
+        }
+        return map;
+    }
+
+    @PostMapping("/user/login")
+    public Map<String,Object> userLogin(@RequestBody Map<String,String> iMap) {
+        Map<String, Object> map = new HashMap<>();
+        String result = "前端返回参数无效";
+        if(iMap.get("user_name")!=null){
+            String userName=iMap.get("user_name");
+            String userPass=iMap.get("user_password");
+            Map<String,Object> row=null;
+            String sql="SELECT * FROM users WHERE user_name='"+userName+"'";
+            try {
+                row=hiveJdbcTemplate.queryForMap(sql);
+                if(row==null){
+                    result="用户名错误";
+                    map.put("result", result);
+                }
+                else{
+                    if(row.get("user_password")!=userPass){
+                        result="密码错误";
+                        map.put("result", result);
+                    }
+                    else{
+                        result="登陆成功";
+                        map.put("result", result);
+                    }
+                }
+            } catch (DataAccessException dae) {
+                result = "Insert table encounter an error: " + dae.getMessage();
+                map.put("result", result);
+            }
+        }
+        else{
+            map.put("result", result);
+        }
+        return map;
+    }
+
+    @PostMapping("/goods/buy")
+    public Map<String,Object> goodsBuy(@RequestBody Map<String,String> iMap) {
+        Map<String,Object> map=new HashMap<>();
+        String result ="前端返回参数无效";
+        if(iMap.get("user_name")!=null){
+            String userName=iMap.get("user_name");
+            String goodsName=iMap.get("goods_name");
+            int goodsNum= Integer.parseInt(iMap.get("goods_number"));
+            String sql0="SELECT * FROM goods WHERE goods_name='"+goodsName+"'";
+            Map<String,Object> row=hiveJdbcTemplate.queryForMap(sql0);
+            goodsNum=Integer.parseInt((String) row.get("goods_number"))-goodsNum;
+            String sql="UPDATE goods SET goods_number="+goodsNum+"WHERE goods_name='"+goodsName+"'";
+            String sql2="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('"+userName+"','"+goodsName+"',"+goodsNum+")";
+            try {
+                hiveJdbcTemplate.execute(sql);
+                hiveJdbcTemplate.execute(sql2);
+            } catch (DataAccessException dae) {
+                result = "Update table encounter an error: " + dae.getMessage();
+                map.put("result", result);
+            }
+        }
+        else{
+            map.put("result", result);
+        }
+        return map;
     }
 }
