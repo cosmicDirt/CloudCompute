@@ -1,4 +1,4 @@
-package com.example.cloudcompute.service;
+package com.example.cloudcompute;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

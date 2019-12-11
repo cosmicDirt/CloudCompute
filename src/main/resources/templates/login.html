@@ -32,26 +32,29 @@
                         <div class="content">
                             <form method="post" class="form-validate" id="loginFrom">
                                 <div class="form-group">
-                                    <input id="login-username" type="text" name="userName" required data-msg="Enter Username" placeholder="Username" value="admin" class="input-material">
+                                    <input id="login-username" type="text" name="userName" required
+                                           data-msg="Enter Username" placeholder="Username" value="admin"
+                                           class="input-material">
                                 </div>
                                 <div class="form-group">
-                                    <input id="login-password" type="password" name="passWord" required data-msg="Enter Your Password" placeholder="Password" class="input-material">
+                                    <input id="login-password" type="password" name="passWord" required
+                                           data-msg="Enter Your Password" placeholder="Password" class="input-material">
                                 </div>
-                                <button id="login" type="button" onclick="clickLogin()" class="btn btn-primary">Login</button>
-                                <div style="margin-top: -40px;">
-                                    <!-- <input type="checkbox"  id="check1"/>&nbsp;<span>记住密码</span>
-                                    <input type="checkbox" id="check2"/>&nbsp;<span>自动登录</span> -->
-                                    <div class="custom-control custom-checkbox " style="float: right;">
-                                        <input type="checkbox" class="custom-control-input" id="check2" >
-                                        <label class="custom-control-label" for="check2">自动登录</label>
+                                <button id="login" type="button" onclick="clickLogin()" class="btn btn-primary">登陆<button>
+                                    <div style="margin-top: -40px;">
+                                        <!-- <input type="checkbox"  id="check1"/>&nbsp;<span>记住密码</span>
+                                        <input type="checkbox" id="check2"/>&nbsp;<span>自动登录</span> -->
+                                        <div class="custom-control custom-checkbox " style="float: right;">
+                                            <input type="checkbox" class="custom-control-input" id="check2">
+                                            <label class="custom-control-label" for="check2">自动登录</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox " style="float: right;">
+                                            <input type="checkbox" class="custom-control-input" id="check1">
+                                            <label class="custom-control-label" for="check1">记住密码&nbsp;&nbsp;</label>
+                                        </div>
                                     </div>
-                                    <div class="custom-control custom-checkbox " style="float: right;">
-                                        <input type="checkbox" class="custom-control-input" id="check1" >
-                                        <label class="custom-control-label" for="check1">记住密码&nbsp;&nbsp;</label>
-                                    </div>
-                                </div>
                             </form>
-                            <br />
+                            <br/>
                             <small>新用户？ </small><a href="register" class="signup">&nbsp;注册</a>
                         </div>
                     </div>
@@ -61,82 +64,62 @@
     </div>
 </div>
 <!-- JavaScript files-->
+<script src="js/axios.min.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.cookie.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script><!--表单验证-->
 <!-- Main File-->
 <script src="js/front.js"></script>
 <script>
-    function clickLogin()
-    {
-        let userName=$("#login-username").val();
-        let passWord=$("#login-password").val();
+    function clickLogin() {
+        let userName = $("#login-username").val();
+        let passWord = $("#login-password").val();
         /*获取当前输入的账号密码*/
         doLogin(userName, passWord);
     }
-    function doLogin(userName, passWord)
-    {
-        $.ajax({
-            type:"get",
-            url:"/api/user/login",
-            data:{"username":userName,"password":passWord},
-            async:true,
-            success:function(response){
-                // console.log(response);
-                let status = response.status;
-                let userAvatarLink = response.userAvatarLink;
-                let userType = response.userType;
-                let userId = response.userId;
-                // console.log("status:", status);
-                // console.log("userAvatarLink:", userAvatarLink);
-                // console.log("userType:", userType);
-                if (status == "OK") {
-                    localStorage.setItem("userId",userId);
-                    localStorage.setItem("userId",userId);
-                    localStorage.setItem("userName", userName);
-                    localStorage.setItem("passWord", passWord);
-                    /*获取记住密码  自动登录的 checkbox的值*/
-                    let check1 = $("#check1").prop('checked');
-                    let check2 = $('#check2').prop('checked');
-                    localStorage.setItem("check1", check1);
-                    localStorage.setItem("check2", check2);
-                    localStorage.setItem("userType", userType);
-                    localStorage.setItem("userAvatarLink", userAvatarLink);
-                    window.open("/","_self")
-                }
-                else if(status == "UserNotExist"){
-                    alert("User not exist!");
-                }
-                else if (status == "PasswordError"){
-                    alert("Password error!");
-                }
+
+    function doLogin(userName, passWord) {
+        let data = {"user_name": userName, "user_password": passWord};
+        axios.post('/hive2/user/login', data).then(function (response) {
+
+            let status = response.data.result;
+
+            if (status == "登陆成功") {
+                localStorage.setItem("userName", userName);
+                localStorage.setItem("passWord", passWord);
+                /*获取记住密码  自动登录的 checkbox的值*/
+                let check1 = $("#check1").prop('checked');
+                let check2 = $('#check2').prop('checked');
+                localStorage.setItem("check1", check1);
+                localStorage.setItem("check2", check2);
+                window.open("/","_self");
+            } else {
+                alert(status);
             }
         });
     }
-    $(function(){
-        /*判断上次是否勾选记住密码和自动登录*/
-        let check1s=localStorage.getItem("check1");
-        let check2s=localStorage.getItem("check2");
-        let oldName=localStorage.getItem("userName");
-        let oldPass=localStorage.getItem("passWord");
-        if(check1s=="true"){
-            $("#login-username").val(oldName);
-            $("#login-password").val(oldPass);
-            $("#check1").prop('checked',true);
-        }
-        else{
-            $("#login-username").val('');
-            $("#login-password").val('');
-            $("#check1").prop('checked',false);
-        }
-        if(check2s=="true"){
-            doLogin(oldName, oldPass);
-        }
-        else{
-            $("#check2").prop('checked',false);
-        }
-    })
+        $(function () {
+            /*判断上次是否勾选记住密码和自动登录*/
+            let check1s = localStorage.getItem("check1");
+            let check2s = localStorage.getItem("check2");
+            let oldName = localStorage.getItem("userName");
+            let oldPass = localStorage.getItem("passWord");
+            if (check1s == "true") {
+                $("#login-username").val(oldName);
+                $("#login-password").val(oldPass);
+                $("#check1").prop('checked', true);
+            } else {
+                $("#login-username").val('');
+                $("#login-password").val('');
+                $("#check1").prop('checked', false);
+            }
+            if (check2s == "true") {
+                doLogin(oldName, oldPass);
+            } else {
+                $("#check2").prop('checked', false);
+            }
+        })
 </script>
 </body>
 </html>

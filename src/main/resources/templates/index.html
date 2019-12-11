@@ -125,7 +125,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="container">
             <h3 class="title">商品</h3>
             <div class="buy" style="text-align: center">
-            <el-form :inline="true"  class="demo-form-inline">
+                <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
                         <el-select v-model="buyGood" placeholder="选择商品">
                             <el-option label="梨子" value="梨子"></el-option>
@@ -150,7 +150,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <a class="cm-overlay" href="images/pear.jpg">
                             <img src="images/pear.jpg" alt=" " class="img-responsive"/>
                             <div class="w3agile-text w3agile-text-smal1">
-                                <h5>{{this.goods[1].goods_name}}<br/>{{this.goods[1].goods_price}}<br/>库存:{{this.goods[1].goods_number}}</h5>
+                                <h5>
+                                    {{this.goods[1]["goods.goods_name"]}}<br/>{{this.goods[1]["goods.goods_price"]}}<br/>库存:{{this.goods[1]["goods.goods_number"]}}
+                                </h5>
                             </div>
                         </a>
                     </div>
@@ -159,7 +161,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <a class="cm-overlay" href="images/apple.jpg">
                                 <img src="images/apple.jpg" alt=" " class="img-responsive"/>
                                 <div class="w3agile-text w3agile-text-small">
-                                    <h5>{{this.goods[0].goods_name}}<br/>{{this.goods[0].goods_price}}<br/>库存:{{this.goods[0].goods_number}}</h5>
+                                    <h5>{{this.goods[0]["goods.goods_name"]}}<br/>{{this.goods[0]["goods.goods_price"]}}<br/>库存:{{this.goods[0]["goods.goods_number"]}}
+                                    </h5>
                                 </div>
                             </a>
                         </div>
@@ -167,7 +170,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <a class="cm-overlay" href="images/banana.jpg">
                                 <img src="images/banana.jpg" alt=" " class="img-responsive"/>
                                 <div class="w3agile-text w3agile-text-smal1">
-                                    <h5>{{this.goods[5].goods_name}}<br/>{{this.goods[5].goods_price}}<br/>库存:{{this.goods[5].goods_number}}</h5>
+                                    <h5>{{this.goods[5]["goods.goods_name"]}}<br/>{{this.goods[5]["goods.goods_price"]}}<br/>库存:{{this.goods[5]["goods.goods_number"]}}
+                                    </h5>
                                 </div>
                             </a>
                         </div>
@@ -180,7 +184,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <a class="cm-overlay" href="images/peach.jpg">
                                 <img src="images/peach.jpg" alt=" " class="img-responsive"/>
                                 <div class="w3agile-text w3agile-text-small">
-                                    <h5>{{this.goods[2].goods_name}}<br/>{{this.goods[2].goods_price}}<br/>库存:{{this.goods[2].goods_number}}</h5>
+                                    <h5>{{this.goods[2]["goods.goods_name"]}}<br/>{{this.goods[2]["goods.goods_price"]}}<br/>库存:{{this.goods[2]["goods.goods_number"]}}
+                                    </h5>
                                 </div>
                             </a>
                         </div>
@@ -188,7 +193,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <a class="cm-overlay" href="images/grape.jpg">
                                 <img src="images/grape.jpg" alt=" " class="img-responsive"/>
                                 <div class="w3agile-text w3agile-text-smal1">
-                                    <h5>{{this.goods[3].goods_name}}<br/>{{this.goods[3].goods_price}}<br/>库存:{{this.goods[3].goods_number}}</h5>
+                                    <h5>{{this.goods[3]["goods.goods_name"]}}<br/>{{this.goods[3]["goods.goods_price"]}}<br/>库存:{{this.goods[3]["goods.goods_number"]}}
+                                    </h5>
                                 </div>
                             </a>
                         </div>
@@ -198,7 +204,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <a class="cm-overlay" href="images/durian.jpg">
                             <img src="images/durian.jpg" alt=" " class="img-responsive"/>
                             <div class="w3agile-text w3agile-text-smal1">
-                                <h5>{{this.goods[4].goods_name}}<br/>{{this.goods[4].goods_price}}<br/>库存:{{this.goods[4].goods_number}}</h5>
+                                <h5>
+                                    {{this.goods[4]["goods.goods_name"]}}<br/>{{this.goods[4]["goods.goods_price"]}}<br/>库存:{{this.goods[4]["goods.goods_number"]}}
+                                </h5>
                             </div>
                         </a>
                     </div>
@@ -274,19 +282,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 :data="orders"
                                 style="width: 100%">
                             <el-table-column
-                                    prop="user_name"
                                     label="客户姓名"
                                     width="180">
+                                <template scope="scope">
+                                    <p>{{scope.row["o.user_name"]}}</p>
+                                </template>
                             </el-table-column>
                             <el-table-column
-                                    prop="goods_name"
                                     label="商品名"
                                     width="180">
+                                <template scope="scope">
+                                    <p>{{scope.row["o.goods_name"]}}</p>
+                                </template>
                             </el-table-column>
+
                             <el-table-column
-                                    prop="goods_number"
                                     label="商品数量"
                                     width="180">
+                                <template scope="scope">
+                                    <p>{{scope.row["o.goods_number"]}}</p>
+                                </template>
                             </el-table-column>
                         </el-table>
                         <p></p>
@@ -324,6 +339,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
     </div>
 </div>
+<script src="js/axios.min.js"></script>
 <!-- //copy-right -->
 <!-- Gallery-plugin -->
 <script src="js/jquery.mobile.custom.min.js"></script>
@@ -366,50 +382,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </body>
 
 <script>
+    var user = localStorage.getItem("userName");
+    var com=function (a,b) {
+        if (parseInt(a["goods.goods_id"]) > parseInt(b["goods.goods_id"])) {
+            console.log("a");
+            return 1;
+        }
+        else {
+            console.log("b");
+            return -1;
+        }
+    };
     new Vue({
         el: '#index',
         data: {
-            buyGood:"",
-            buyAmount:"",
-            goods: [
-                {
-                    goods_name: "苹果",
-                    goods_price:15,
-                    goods_number: 32
-                },
-                {
-                    goods_name: "香蕉",
-                    goods_price:15,
-                    goods_number: 32
-                },
-                {
-                    goods_name: "苹果",
-                    goods_price:15,
-                    goods_number: 32
-                },
-                {
-                    goods_name: "苹果",
-                    goods_price:15,
-                    goods_number: 32
-                },
-                {
-                    goods_name: "苹果",
-                    goods_price:15,
-                    goods_number: 32
-                },
-                {
-                    goods_name: "苹果",
-                    goods_price:15,
-                    goods_number: 32
-                },
-            ],
-            orders:[
-                {
-                    goods_name: "苹果",
-                    user_name:"路人甲",
-                    goods_number: 5
-                },
-            ],
+            buyGood: "",
+            buyAmount: "",
+            goods: [],
+            orders: [],
             clientInfo: {
                 name: "",
                 phone: "",
@@ -417,38 +407,46 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             },
 
         },
-        method: {
-            getGoods:function(){
+        beforeMount() {
+            this.getGoods();
+            this.viewOrders();
+        },
+        methods: {
+            getGoods: function () {
+                console.log("fsdf");
                 axios.post('/hive2/goods/select').then(function (response) {
-                    this.goods=response.data.goods_list;
+                    this.goods = response.data.goods_list;
+                    this.goods.sort(com);
                 }.bind(this));
             },
             onSubmit: function () {
-                let data= {
-                    user_name: this.clientInfo.name,
-                    user_phone:this.clientInfo.phone,
-                    user_address:this.clientInfo.address
+                let data = {
+                    user_name: user,
+                    user_phone: this.clientInfo.phone,
+                    user_address: this.clientInfo.address
                 }
-                axios.post('/hive2/user/update',data).then(function (response) {
+                axios.post('/hive2/user/update', data).then(function (response) {
 
                 }.bind(this));
             },
-            buy:function(){
-                let data={
-                    user_name:this.clientInfo.name,
-                    goods_name:this.buyGood,
-                    goods_number:this.buyAmount
+            buy: function () {
+                let data = {
+                    user_name: user,
+                    goods_name: this.buyGood,
+                    goods_number: this.buyAmount
                 }
-                axios.post('/hive2/goods/buy',data).then(function (response) {
-
+                axios.post('/hive2/goods/buy', data).then(function (response) {
+                    this.getGoods();
+                    this.viewOrders();
                 }.bind(this));
             },
-            viewOrders:function () {
-                let data= {
-                    user_name: this.clientInfo.name
+            viewOrders: function () {
+                let data = {
+                    user_name: user
                 }
-                axios.post('hive2/order/select',data).then(function(response){
-                    this.orders=response.data.order_list;
+                axios.post('hive2/order/select', data).then(function (response) {
+                    this.orders = response.data.order_list;
+                    console.log(this.orders);
                 }.bind(this));
             },
         },

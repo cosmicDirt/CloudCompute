@@ -104,7 +104,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <mainClass>com.example.cloudcompute.service.CloudcomputeApplication</mainClass>
+                    <mainClass>com.example.cloudcompute.CloudcomputeApplication</mainClass>
                     <layout>ZIP</layout>
 
                 </configuration>

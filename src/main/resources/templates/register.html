@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button id="regbtn" type="button" onclick="clickRegister()" name="registerSubmit" class="btn btn-primary">Register</button>
+                                <button id="regbtn" type="button" onclick="clickRegister()" name="registerSubmit" class="btn btn-primary">注册</button>
                             </div>
                             <small>已经注册过?</small><a href="/login" class="signup">&nbsp;登录</a>
                         </div>
@@ -63,7 +63,8 @@
 </div>
 <!-- JavaScript files-->
 <script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/axios.min.js"></script>
 <script>
     var flagName=false;
     var flagPas=false;
@@ -89,34 +90,18 @@
     }
     function doRegister(userName, passWord)
     {
-        $.ajax({
-            type:"get",
-            url:"/api/user/register",
-            data:{"username":userName,"password":passWord},
-            async:true,
-            success:function(response){
-                // console.log(response);
-                let status = response.status;
-                let userAvatarLink = response.userAvatarLink;
-                let userType = response.userType;
-                let userId = response.userId;
-                if (status == "UsernameExist"){
-                    alert(status);
-                }
-                else if (status == "PasswordTooShort"){
-                    alert(status);
-                }
-                else if (status == "OK"){
-                    localStorage.setItem("userId", userId);
-                    localStorage.setItem("userName", userName);
-                    localStorage.setItem("passWord", passWord);
-                    localStorage.setItem("userType", userType);
-                    localStorage.setItem("userAvatarLink", userAvatarLink);
-                    alert("Succeed!");
-                    window.open("/");
-                }
+        let data={"user_name":userName,"user_password":passWord}
+        axios.post('/hive2/user/register',data).then(function(response){
+
+                let status = response.data.result;
+
+                localStorage.setItem("userName", userName);
+                localStorage.setItem("passWord", passWord);
+
+                alert("Succeed!");
+                window.open("/");
             }
-        });
+        );
     }
     $(function(){
         /*错误class  form-control is-invalid
