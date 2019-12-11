@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sale</title>
+    <!-- custom-theme -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="Candid Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- //custom-theme -->
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+    <!-- stylesheet -->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <!-- //stylesheet -->
+    <!-- online fonts -->
+    <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <!-- //online fonts -->
+    <!-- font-awesome-icons -->
+    <link href="css/font-awesome.css" type="text/css" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <link rel="stylesheet" type="text/css" href="css/element-ui.css">
+    <script src="js/vue.js"></script>
+    <script src="js/element-ui.js"></script>
+
+</head>
+<body>
+<div id="index">
+    <div class="agileits_main">
+        <!-- header -->
+        <div class="w3_agile_logo">
+            <h1 class="text-center"><a href="index.html">水果市场</a></h1>
+        </div>
+        <!-- banner -->
+        <div class="w3_banner">
+            <div class="container">
+                <div class="slider">
+                    <div class="callbacks_container">
+                        <ul class="rslides callbacks callbacks1" id="slider4">
+                            <li>
+                                <div class="banner_text_w3layouts">
+                                    <h3>榴莲</h3>
+                                    <span> </span>
+                                    <p>特价商品 </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="banner_text_w3layouts">
+                                    <h3>桃子</h3>
+                                    <span> </span>
+                                    <p>特价商品 </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="banner_text_w3layouts">
+                                    <h3>梨子</h3>
+                                    <span> </span>
+                                    <p>特价商品 </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <script src="js/responsiveslides.min.js"></script>
+                    <script>
+                        // You can also use "$(window).load(function() {"
+                        $(function () {
+                            // Slideshow 4
+                            $("#slider4").responsiveSlides({
+                                auto: true,
+                                pager: true,
+                                nav: true,
+                                speed: 500,
+                                namespace: "callbacks",
+                                before: function () {
+                                    $('.events').append("<li>before event fired.</li>");
+                                },
+                                after: function () {
+                                    $('.events').append("<li>after event fired.</li>");
+                                }
+                            });
+
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- menu -->
+        <nav class="navbar navbar-inverse ">
+            <div class="container">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse top-nav w3l" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav linkEffects linkHoverEffect_11 custom-menu">
+                        <li class="agile_active"><a href="index.html" class="scroll"><span>主页</span></a></li>
+                        <li><a href="#gallery" class="scroll"><span>购买商品</span></a></li>
+                        <li><a href="#about" class="scroll"><span>关于我们</span></a></li>
+                        <li><a href="#blog" class="scroll"><span>填写信息</span></a></li>
+                        <li><a href="#blog" class="scroll"><span>查看订单</span></a></li>
+                        <a href="/login">登录</a>
+                        <a href="/register">注册</a>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- //menu -->
+    </div>
+    <!-- //banner -->
+
+    <!-- gallery -->
+    <div class="gallery_wthree" id="gallery">
+        <div class="container">
+            <h3 class="title">商品</h3>
+            <div class="buy" style="text-align: center">
+            <el-form :inline="true"  class="demo-form-inline">
+                    <el-form-item>
+                        <el-select v-model="buyGood" placeholder="选择商品">
+                            <el-option label="梨子" value="梨子"></el-option>
+                            <el-option label="桃子" value="桃子"></el-option>
+                            <el-option label="香蕉" value="香蕉"></el-option>
+                            <el-option label="苹果" value="苹果"></el-option>
+                            <el-option label="葡萄" value="葡萄"></el-option>
+                            <el-option label="榴莲" value="榴莲"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="buyAmount" placeholder="购买数量"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="buy">购买</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="gallery_grid agileits_w3layouts">
+                <div class="col-md-6  col-sm-6 col-xs-6 grid_w3">
+                    <div class="grid-1">
+                        <a class="cm-overlay" href="images/pear.jpg">
+                            <img src="images/pear.jpg" alt=" " class="img-responsive"/>
+                            <div class="w3agile-text w3agile-text-smal1">
+                                <h5>{{this.goods[1].goods_name}}<br/>{{this.goods[1].goods_price}}<br/>库存:{{this.goods[1].goods_number}}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="sub_grid gallery_w3l">
+                        <div class="col-md-6 col-sm-6 col-xs-6 grid-1 grid-c grid_w3l">
+                            <a class="cm-overlay" href="images/apple.jpg">
+                                <img src="images/apple.jpg" alt=" " class="img-responsive"/>
+                                <div class="w3agile-text w3agile-text-small">
+                                    <h5>{{this.goods[0].goods_name}}<br/>{{this.goods[0].goods_price}}<br/>库存:{{this.goods[0].goods_number}}</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 grid-1 grid-b grid_w3l">
+                            <a class="cm-overlay" href="images/banana.jpg">
+                                <img src="images/banana.jpg" alt=" " class="img-responsive"/>
+                                <div class="w3agile-text w3agile-text-smal1">
+                                    <h5>{{this.goods[5].goods_name}}<br/>{{this.goods[5].goods_price}}<br/>库存:{{this.goods[5].goods_number}}</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 grid_w3">
+                    <div class="sub_grid">
+                        <div class="col-md-6 col-sm-6 col-xs-6 grid-1 grid-c grid_w3l">
+                            <a class="cm-overlay" href="images/peach.jpg">
+                                <img src="images/peach.jpg" alt=" " class="img-responsive"/>
+                                <div class="w3agile-text w3agile-text-small">
+                                    <h5>{{this.goods[2].goods_name}}<br/>{{this.goods[2].goods_price}}<br/>库存:{{this.goods[2].goods_number}}</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 grid-1 grid-d grid_w3l">
+                            <a class="cm-overlay" href="images/grape.jpg">
+                                <img src="images/grape.jpg" alt=" " class="img-responsive"/>
+                                <div class="w3agile-text w3agile-text-smal1">
+                                    <h5>{{this.goods[3].goods_name}}<br/>{{this.goods[3].goods_price}}<br/>库存:{{this.goods[3].goods_number}}</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="grid-1 grid-2">
+                        <a class="cm-overlay" href="images/durian.jpg">
+                            <img src="images/durian.jpg" alt=" " class="img-responsive"/>
+                            <div class="w3agile-text w3agile-text-smal1">
+                                <h5>{{this.goods[4].goods_name}}<br/>{{this.goods[4].goods_price}}<br/>库存:{{this.goods[4].goods_number}}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- //gallery -->
+
+    <!-- about -->
+    <div class="about_agileinfo" id="about">
+        <div class="container">
+            <h3 class="title">关于我们</h3>
+            <div class="about_main">
+                <div class="col-md-6 col-sm-6 col-xs-6 about_agileits"></div>
+                <div class="col-md-6 col-sm-6 col-xs-6 about_text_w3l">
+                    <h4>简介</h4>
+                    <P>
+                        我们是一家专营水果销售的公司balabala
+                        balabalabalabalabalabalabalabalab
+                        alabalabalabalabalabalabalabalabalabala
+                    </P>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- //about -->
+
+    <!-- Tooltip -->
+    <div class="tooltip-content">
+        <div class="modal fade features-modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title text-center">修改个人信息</h2>
+                    </div>
+                    <div class="modal-body">
+                        <el-form ref="form" :model="clientInfo" label-width="80px">
+                            <el-form-item label="姓名">
+                                <el-input v-model="clientInfo.name" disabled="true"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机">
+                                <el-input v-model="clientInfo.phone"></el-input>
+                            </el-form-item>
+                            <el-form-item label="收货地址">
+                                <el-input v-model="clientInfo.address"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit" data-dismiss="modal">提交</el-button>
+                                <el-button data-dismiss="modal">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tooltip-content">
+        <div class="modal fade features-modal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title text-center">已有订单</h2>
+                    </div>
+                    <div class="modal-body">
+                        <el-table
+                                :data="orders"
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="user_name"
+                                    label="客户姓名"
+                                    width="180">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="goods_name"
+                                    label="商品名"
+                                    width="180">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="goods_number"
+                                    label="商品数量"
+                                    width="180">
+                            </el-table-column>
+                        </el-table>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Tooltip -->
+    <!-- section -->
+    <div class="w3layouts-section" id="blog">
+        <div class="container">
+            <h3 class="title">开始你的购物之旅吧！</h3>
+            <p>您可以点击下方的按钮来填写或修改您的信息，之后可以在商品列表中选择您心仪的商品点击购买，购买完成后可以在此查看订单</p>
+            <a href="#myModal" class="agilebtn" data-toggle="modal" data-target="#myModal"><span>填写个人信息</span></a>
+            <a href="#myModal2" class="agilebtn" data-toggle="modal" data-target="#myModal2"><span>查看订单</span></a>
+        </div>
+    </div>
+    <!-- //section -->
+
+
+    <!-- copy-right -->
+    <div class="copy-right agileits-w3layouts">
+        <div class="container">
+            <div class="social-icons agileits">
+                <ul>
+                    <li><a href="#" class="fa fa-facebook icon icon-border facebook"> </a></li>
+                    <li><a href="#" class="fa fa-twitter icon icon-border twitter"> </a></li>
+                    <li><a href="#" class="fa fa-google-plus icon icon-border googleplus"> </a></li>
+                    <li><a href="#" class="fa fa-dribbble icon icon-border dribbble"> </a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <p>这是一个云计算的期末项目</p>
+        </div>
+    </div>
+</div>
+<!-- //copy-right -->
+<!-- Gallery-plugin -->
+<script src="js/jquery.mobile.custom.min.js"></script>
+<script src="js/jquery.cm-overlay.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.cm-overlay').cmOverlay();
+    });
+</script>
+<!-- //Gallery-plugin -->
+<!-- start-smooth-scrolling -->
+<script type="text/javascript" src="js/move-top.js"></script>
+<script type="text/javascript" src="js/easing.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
+        });
+    });
+</script>
+<script src="js/SmoothScroll.min.js"></script>
+<!-- //end-smooth-scrolling -->
+<!-- smooth-scrolling-of-move-up -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*
+        var defaults = {
+            containerID: 'toTop', // fading element id
+            containerHoverID: 'toTopHover', // fading element hover id
+            scrollSpeed: 1200,
+            easingType: 'linear'
+        };
+        */
+        $().UItoTop({easingType: 'easeOutQuart'});
+    });
+</script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+</body>
+
+<script>
+    new Vue({
+        el: '#index',
+        data: {
+            buyGood:"",
+            buyAmount:"",
+            goods: [
+                {
+                    goods_name: "苹果",
+                    goods_price:15,
+                    goods_number: 32
+                },
+                {
+                    goods_name: "香蕉",
+                    goods_price:15,
+                    goods_number: 32
+                },
+                {
+                    goods_name: "苹果",
+                    goods_price:15,
+                    goods_number: 32
+                },
+                {
+                    goods_name: "苹果",
+                    goods_price:15,
+                    goods_number: 32
+                },
+                {
+                    goods_name: "苹果",
+                    goods_price:15,
+                    goods_number: 32
+                },
+                {
+                    goods_name: "苹果",
+                    goods_price:15,
+                    goods_number: 32
+                },
+            ],
+            orders:[
+                {
+                    goods_name: "苹果",
+                    user_name:"路人甲",
+                    goods_number: 5
+                },
+            ],
+            clientInfo: {
+                name: "",
+                phone: "",
+                address: "",
+            },
+
+        },
+        method: {
+            getGoods:function(){
+                axios.post('/hive2/goods/select').then(function (response) {
+                    this.goods=response.data.goods_list;
+                }.bind(this));
+            },
+            onSubmit: function () {
+                let data= {
+                    user_name: this.clientInfo.name,
+                    user_phone:this.clientInfo.phone,
+                    user_address:this.clientInfo.address
+                }
+                axios.post('/hive2/user/update',data).then(function (response) {
+
+                }.bind(this));
+            },
+            buy:function(){
+                let data={
+                    user_name:this.clientInfo.name,
+                    goods_name:this.buyGood,
+                    goods_number:this.buyAmount
+                }
+                axios.post('/hive2/goods/buy',data).then(function (response) {
+
+                }.bind(this));
+            },
+            viewOrders:function () {
+                let data= {
+                    user_name: this.clientInfo.name
+                }
+                axios.post('hive2/order/select',data).then(function(response){
+                    this.orders=response.data.order_list;
+                }.bind(this));
+            },
+        },
+    })
+</script>
+
+</html>
