@@ -72,7 +72,7 @@ public class HiveJdbcTemplateController {
     public String createOrderTable() {
         StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
         sql.append("orders");
-        sql.append("(order_id INT, user_name STRING, goods_name STRING, goods_number INT)");
+        sql.append("(user_name STRING, goods_name STRING, goods_number INT)");
 //        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
 //        sql.append("STORED AS TEXTFILE"); // 作为文本存储
         logger.info("Running: " + sql);
@@ -109,28 +109,27 @@ public class HiveJdbcTemplateController {
      */
     @RequestMapping("/table/insert")
     public String insertIntoTable() {
-//        String sql = "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(1,'苹果','红的','dfada',15,32)";
+        String sql = "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(1,'苹果','红的','dfada',15,32)";
 //        String sql2= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(2,'梨子','鸭的','dfada',15,32)";
 //        String sql3= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(3,'桃子','长毛的','dfada',15,32)";
 //        String sql4= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(4,'葡萄','绿的','dfada',15,32)";
 //        String sql5= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(5,'榴莲','香的','dfada',15,32)";
 //        String sql6="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('ghy','123456','18721923502','20号楼533')";
 //        String sql7="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('ghy','榴莲',3)";
-        String a="香蕉";
-        int b=15;
-        String sql8="INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(6,'"+a+"','香的','dfada',"+b+",32)";
+//        String a="香蕉";
+//        int b=15;
+//        String sql8="INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(6,'"+a+"','香的','dfada',"+b+",32)";
         String result = "Insert into table successfully...";
 
         try {
-            // hiveJdbcTemplate.execute(sql);
-//            hiveJdbcTemplate.execute(sql);
+             hiveJdbcTemplate.execute(sql);
 //            hiveJdbcTemplate.execute(sql2);
 //            hiveJdbcTemplate.execute(sql3);
 //            hiveJdbcTemplate.execute(sql4);
 //            hiveJdbcTemplate.execute(sql5);
 //            hiveJdbcTemplate.execute(sql6);
 //            hiveJdbcTemplate.execute(sql7);
-            hiveJdbcTemplate.execute(sql8);
+//            hiveJdbcTemplate.execute(sql8);
         } catch (DataAccessException dae) {
             result = "Insert into table encounter an error: " + dae.getMessage();
             logger.error(result);
@@ -138,6 +137,20 @@ public class HiveJdbcTemplateController {
         return result;
     }
 
+    @RequestMapping("/table/test")
+    public String testTable() {
+        String sql ="insert overwrite table goods select * from goods where goods_id<>1";
+        String result = "Insert into table successfully...";
+        try {
+            hiveJdbcTemplate.execute(sql);
+            sql="SELECT * FROM goods";
+            hiveJdbcTemplate.execute(sql);
+        } catch (DataAccessException dae) {
+            result = "Insert into table encounter an error: " + dae.getMessage();
+            logger.error(result);
+        }
+        return result;
+    }
     /**
      * 示例：删除表
      */
@@ -203,11 +216,15 @@ public class HiveJdbcTemplateController {
             String userName=iMap.get("user_name");
             String userPhone=iMap.get("user_phone");
             String useradd=iMap.get("user_address");
-            String sql="UPDATE users SET user_phone='"+userPhone+"' WHERE user_name='"+userName+"'";
-            String sql2="UPDATE users SET user_address='"+useradd+"' WHERE user_name='"+userName+"'";
             try {
-                hiveJdbcTemplate.execute(sql);
-                hiveJdbcTemplate.execute(sql2);
+                    String sql="select * from users where user_name='"+userName+"'";
+                    Map<String,Object> user=hiveJdbcTemplate.queryForMap(sql);
+                    sql="insert overwrite table users select * from users where user_name<>'"+userName+"'";
+                    hiveJdbcTemplate.execute(sql);
+                    sql = "INSERT INTO TABLE users(user_name,user_password,user_phone,user_address)" +
+                            " VALUES ('"+user.get("user_name")+"','"+user.get("user_password")+
+                            "','"+userPhone+"','"+useradd+"')";
+                    hiveJdbcTemplate.execute(sql);
             } catch (DataAccessException dae) {
                 result = "Update table encounter an error: " + dae.getMessage();
                 map.put("result", result);
@@ -289,11 +306,17 @@ public class HiveJdbcTemplateController {
             String sql0="SELECT * FROM goods WHERE goods_name='"+goodsName+"'";
             Map<String,Object> row=hiveJdbcTemplate.queryForMap(sql0);
             goodsNum=Integer.parseInt((String) row.get("goods_number"))-goodsNum;
-            String sql="UPDATE goods SET goods_number="+goodsNum+"WHERE goods_name='"+goodsName+"'";
             String sql2="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('"+userName+"','"+goodsName+"',"+goodsNum+")";
             try {
-                hiveJdbcTemplate.execute(sql);
                 hiveJdbcTemplate.execute(sql2);
+                String sql="select * from goods where goods_name='"+goodsName+"'";
+                Map<String,Object> goods=hiveJdbcTemplate.queryForMap(sql);
+                sql="insert overwrite table goods select * from goods where goods_name='"+goodsName+"'";
+                hiveJdbcTemplate.execute(sql);
+                sql = "INSERT INTO TABLE  goods(goods_id,goods_name , goods_info , goods_pic, goods_price , goods_number) " +
+                        "VALUES("+goods.get("goods_id")+",'"+goods.get("goods_name")+ "','"+goods.get("goods_info")+
+                        "','"+goods.get("goods_pic")+"',"+goods.get("goods_price")+","+goodsNum+")";
+                hiveJdbcTemplate.execute(sql);
             } catch (DataAccessException dae) {
                 result = "Update table encounter an error: " + dae.getMessage();
                 map.put("result", result);
