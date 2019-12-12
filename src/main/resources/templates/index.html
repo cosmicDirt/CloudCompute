@@ -48,21 +48,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <ul class="rslides callbacks callbacks1" id="slider4">
                             <li>
                                 <div class="banner_text_w3layouts">
-                                    <h3>榴莲</h3>
-                                    <span> </span>
-                                    <p>特价商品 </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="banner_text_w3layouts">
                                     <h3>桃子</h3>
-                                    <span> </span>
-                                    <p>特价商品 </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="banner_text_w3layouts">
-                                    <h3>梨子</h3>
                                     <span> </span>
                                     <p>特价商品 </p>
                                 </div>
@@ -385,11 +371,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     var user = localStorage.getItem("userName");
     var com=function (a,b) {
         if (parseInt(a["goods.goods_id"]) > parseInt(b["goods.goods_id"])) {
-            console.log("a");
             return 1;
         }
         else {
-            console.log("b");
             return -1;
         }
     };
@@ -413,7 +397,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         },
         methods: {
             getGoods: function () {
-                console.log("fsdf");
                 axios.post('/hive2/goods/select').then(function (response) {
                     this.goods = response.data.goods_list;
                     this.goods.sort(com);
@@ -429,16 +412,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                 }.bind(this));
             },
+            findid: function(data){
+                for(let i=0;i<6;i++){
+                    if(this.goods[i]["goods.goods_name"]==data){
+                        return this.goods[i]["goods.goods_id"];
+                    }
+                }
+                return -1;
+            },
             buy: function () {
                 let data = {
                     user_name: user,
                     goods_name: this.buyGood,
-                    goods_number: this.buyAmount
+                    goods_number: this.buyAmount,
+                    goods_id: this.findid(this.buyGood)
                 }
                 axios.post('/hive2/goods/buy', data).then(function (response) {
                     this.getGoods();
                     this.viewOrders();
                 }.bind(this));
+                alert("购买成功");
             },
             viewOrders: function () {
                 let data = {
@@ -446,7 +439,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 }
                 axios.post('hive2/order/select', data).then(function (response) {
                     this.orders = response.data.order_list;
-                    console.log(this.orders);
                 }.bind(this));
             },
         },

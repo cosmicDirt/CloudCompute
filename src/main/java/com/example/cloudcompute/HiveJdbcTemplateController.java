@@ -36,7 +36,26 @@ public class HiveJdbcTemplateController {
     public String createGoodsTable() {
         StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
         sql.append("goods");
-        sql.append("(goods_id INT, goods_name STRING, goods_info STRING, goods_pic STRING, goods_price INT, goods_number INT)");
+        sql.append("(goods_name STRING, goods_info STRING, goods_pic STRING, goods_price INT, goods_number INT)");
+        sql.append("PARTITIONED BY (goods_id INT)");
+//        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
+//        sql.append("STORED AS TEXTFILE"); // 作为文本存储
+        logger.info("Running: " + sql);
+        String result = "Create table successfully...";
+        try {
+            hiveJdbcTemplate.execute(sql.toString());
+        } catch (DataAccessException dae) {
+            result = "Create table encounter an error: " + dae.getMessage();
+            logger.error(result);
+        }
+        return result;
+    }
+
+    @RequestMapping("/goodst/create")
+    public String createGoodstempTable() {
+        StringBuffer sql = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
+        sql.append("goodst");
+        sql.append("(goods_id INT,goods_name STRING, goods_info STRING, goods_pic STRING, goods_price INT, goods_number INT)");
 //        sql.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' "); // 定义分隔符
 //        sql.append("STORED AS TEXTFILE"); // 作为文本存储
         logger.info("Running: " + sql);
@@ -109,27 +128,29 @@ public class HiveJdbcTemplateController {
      */
     @RequestMapping("/table/insert")
     public String insertIntoTable() {
-        String sql = "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(1,'苹果','红的','dfada',15,32)";
-        String sql2= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(2,'梨子','鸭的','dfada',15,32)";
-        String sql3= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(3,'桃子','长毛的','dfada',15,32)";
-        String sql4= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(4,'葡萄','绿的','dfada',15,32)";
-        String sql5= "INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(5,'榴莲','香的','dfada',15,32)";
-//        String sql6="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('ghy','123456','18721923502','20号楼533')";
+//        String sql0="set hive.exec.dynamic.partition.mode=nonstrict";
+//        String sql = "INSERT overwrite TABLE  goods partition(goods_id) VALUES('苹果','红的','dfada',15,32,1)";
+//        String sql2= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('梨子','鸭的','dfada',15,32,2)";
+//        String sql3= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('桃子','长毛的','dfada',15,32,3)";
+//        String sql4= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('葡萄','绿的','dfada',15,32,4)";
+//        String sql5= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('榴莲','香的','dfada',15,32,5)";
+        String sql6="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('ghy','123456','18721923502','20号楼533')";
+//        String sql9="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('tom','123456','18721923482','上海')";
 //        String sql7="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('ghy','榴莲',3)";
-        String a="香蕉";
-        int b=15;
-        String sql8="INSERT INTO TABLE  goods(goods_id, goods_name , goods_info , goods_pic, goods_price , goods_number) VALUES(6,'"+a+"','香的','dfada',"+b+",32)";
+//        String sql8="INSERT overwrite TABLE  goods partition(goods_id) VALUES('香蕉','香的','dfada',15,32,6)";
         String result = "Insert into table successfully...";
 
         try {
-             hiveJdbcTemplate.execute(sql);
-            hiveJdbcTemplate.execute(sql2);
-            hiveJdbcTemplate.execute(sql3);
-            hiveJdbcTemplate.execute(sql4);
-            hiveJdbcTemplate.execute(sql5);
-//            hiveJdbcTemplate.execute(sql6);
+//            hiveJdbcTemplate.execute(sql0);
+////             hiveJdbcTemplate.execute(sql);
+//            hiveJdbcTemplate.execute(sql2);
+//            hiveJdbcTemplate.execute(sql3);
+//            hiveJdbcTemplate.execute(sql4);
+//            hiveJdbcTemplate.execute(sql5);
+            hiveJdbcTemplate.execute(sql6);
+//            hiveJdbcTemplate.execute(sql9);
 //            hiveJdbcTemplate.execute(sql7);
-            hiveJdbcTemplate.execute(sql8);
+//            hiveJdbcTemplate.execute(sql8);
         } catch (DataAccessException dae) {
             result = "Insert into table encounter an error: " + dae.getMessage();
             logger.error(result);
@@ -311,6 +332,7 @@ public class HiveJdbcTemplateController {
         if(iMap.get("user_name")!=null&&iMap.get("user_name")!=""){
             String userName=iMap.get("user_name");
             String goodsName=iMap.get("goods_name");
+            int goodsId= Integer.parseInt(iMap.get("goods_id"));
             int goodsNum= Integer.parseInt(iMap.get("goods_number"));
             try {
                 String sql0="SELECT * FROM goods WHERE goods_name='"+goodsName+"'";
@@ -318,13 +340,13 @@ public class HiveJdbcTemplateController {
                 String sql2="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('"+userName+"','"+goodsName+"',"+goodsNum+")";
                 hiveJdbcTemplate.execute(sql2);
                 goodsNum=Integer.parseInt(row.get("goods.goods_number").toString())-goodsNum;
-                String sql="select * from goods where goods_name='"+goodsName+"'";
-                Map<String,Object> goods=hiveJdbcTemplate.queryForMap(sql);
-                sql="insert overwrite table goods select * from goods where goods_name<>'"+goodsName+"'";
+                String sql="alter table goods drop partition(goods_id="+goodsId+")";
                 hiveJdbcTemplate.execute(sql);
-                sql = "INSERT INTO TABLE  goods(goods_id,goods_name , goods_info , goods_pic, goods_price , goods_number) " +
-                        "VALUES("+goods.get("goods.goods_id")+",'"+goods.get("goods.goods_name")+ "','"+goods.get("goods.goods_info")+
-                        "','"+goods.get("goods.goods_pic")+"',"+goods.get("goods.goods_price")+","+goodsNum+")";
+                sql="set hive.exec.dynamic.partition.mode=nonstrict";
+                hiveJdbcTemplate.execute(sql);
+                sql = "INSERT overwrite TABLE  goods partition(goods_id) VALUES" +
+                        "('"+row.get("goods.goods_name")+ "','"+row.get("goods.goods_info")+
+                        "','"+row.get("goods.goods_pic")+"',"+row.get("goods.goods_price")+","+goodsNum+","+row.get("goods.goods_id")+")";
                 hiveJdbcTemplate.execute(sql);
             } catch (DataAccessException dae) {
                 result = "Update table encounter an error: " + dae.getMessage();
