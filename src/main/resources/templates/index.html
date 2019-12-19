@@ -270,14 +270,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <el-table-column
                                     label="客户姓名"
                                     width="180">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <p>{{scope.row["o.user_name"]}}</p>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                     label="商品名"
                                     width="180">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <p>{{scope.row["o.goods_name"]}}</p>
                                 </template>
                             </el-table-column>
@@ -285,7 +285,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <el-table-column
                                     label="商品数量"
                                     width="180">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <p>{{scope.row["o.goods_number"]}}</p>
                                 </template>
                             </el-table-column>
@@ -391,7 +391,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             },
 
         },
-        beforeMount() {
+        mounted() {
             this.getGoods();
             this.viewOrders();
         },
@@ -427,11 +427,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     goods_number: this.buyAmount,
                     goods_id: this.findid(this.buyGood)
                 }
-                axios.post('/hive2/goods/buy', data).then(function (response) {
-                    this.getGoods();
-                    this.viewOrders();
-                }.bind(this));
-                alert("购买成功");
+                if(this.buyAmount>this.goods[this.findid(this.buyGood)]["goods.goods_number"])
+                    alert("库存不足");
+                else {
+                    axios.post('/hive2/goods/buy', data).then(function (response) {
+                        this.getGoods();
+                        this.viewOrders();
+                    }.bind(this));
+                    alert("购买成功");
+                }
             },
             viewOrders: function () {
                 let data = {

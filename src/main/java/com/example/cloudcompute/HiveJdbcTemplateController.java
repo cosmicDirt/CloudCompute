@@ -128,15 +128,15 @@ public class HiveJdbcTemplateController {
      */
     @RequestMapping("/table/insert")
     public String insertIntoTable() {
-//        String sql0="set hive.exec.dynamic.partition.mode=nonstrict";
+        String sql0="set hive.exec.dynamic.partition.mode=nonstrict";
 //        String sql = "INSERT overwrite TABLE  goods partition(goods_id) VALUES('苹果','红的','dfada',15,32,1)";
 //        String sql2= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('梨子','鸭的','dfada',15,32,2)";
 //        String sql3= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('桃子','长毛的','dfada',15,32,3)";
 //        String sql4= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('葡萄','绿的','dfada',15,32,4)";
 //        String sql5= "INSERT overwrite TABLE  goods partition(goods_id) VALUES('榴莲','香的','dfada',15,32,5)";
         String sql6="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('ghy','123456','18721923502','20号楼533')";
-//        String sql9="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('tom','123456','18721923482','上海')";
-//        String sql7="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('ghy','榴莲',3)";
+        String sql9="INSERT INTO TABLE users(user_name,user_password,user_phone,user_address) VALUES ('tom','123456','18721923482','上海')";
+        String sql7="INSERT INTO TABLE orders(user_name,goods_name,goods_number) VALUES ('ghy','榴莲',3)";
 //        String sql8="INSERT overwrite TABLE  goods partition(goods_id) VALUES('香蕉','香的','dfada',15,32,6)";
         String result = "Insert into table successfully...";
 
@@ -148,8 +148,8 @@ public class HiveJdbcTemplateController {
 //            hiveJdbcTemplate.execute(sql4);
 //            hiveJdbcTemplate.execute(sql5);
             hiveJdbcTemplate.execute(sql6);
-//            hiveJdbcTemplate.execute(sql9);
-//            hiveJdbcTemplate.execute(sql7);
+            hiveJdbcTemplate.execute(sql9);
+            hiveJdbcTemplate.execute(sql7);
 //            hiveJdbcTemplate.execute(sql8);
         } catch (DataAccessException dae) {
             result = "Insert into table encounter an error: " + dae.getMessage();

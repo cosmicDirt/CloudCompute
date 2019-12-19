@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class ControllerRouter {
-    @GetMapping("/")
+    @GetMapping("/index")
     public String getIndexPage()
     {
         return "index";
